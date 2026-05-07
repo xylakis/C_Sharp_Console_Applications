@@ -10,7 +10,7 @@
         static public int playerPosX = (int)mapSize/2;
         static public int playerPosY = (int)mapSize/2;
 
-        static public int playerHealth = 100;
+        static public int playerHealth = 85;
         static public string dungeonName = "The swamps";
         static public int dungeonLevel = 1;
         static public int playerExp = 0;
