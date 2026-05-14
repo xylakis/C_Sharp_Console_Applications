@@ -14,15 +14,16 @@
         static public string dungeonName = "The swamps";
         static public int dungeonLevel = 1;
         static public int playerExp = 0;
-        static public string playerName = " "; 
+        static public string playerName = "Excelsior";
+
+        static public float encounterPropability = 0.2f;
+        
 
 
         static void Main(string[] args)
         {
 
-            
-
-            char[,]  myMap = createAMap(mapSize);
+            char[,] myMap = createAMap(mapSize);
 
             // 1st run of my Map
             myMap = updateMyMapCharMovement(myMap);
@@ -32,7 +33,7 @@
 
             // This runs in loop 
             makeAMove(myMap);
-            
+
 
             //randomEncounters();
 
@@ -193,6 +194,7 @@
                         else
                         {
                             Console.WriteLine("You go North");
+                            checkForEncounter(encounterPropability);
                             myMap = updateMyMapCharMovement(myMap);
                             drawMyMap(myMap);
                             drawMyStats();
@@ -202,32 +204,74 @@
                     case ConsoleKey.DownArrow:
                         
                         Console.Clear();
-                        //playerPosY += 1;
-
-                        Console.WriteLine("You go South");
                         playerPosY += 1;
-                        myMap = updateMyMapCharMovement(myMap);
-                        drawMyMap(myMap);
-                        drawMyStats();
-                        break;
+
+                        if (playerPosY > mapSize-1)
+                        {
+                            Console.WriteLine("You cannot go there!");
+                            playerPosY -= 1;
+                            myMap = updateMyMapCharMovement(myMap);
+                            drawMyMap(myMap);
+                            drawMyStats();
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("You go South");
+                            checkForEncounter(encounterPropability);
+                            myMap = updateMyMapCharMovement(myMap);
+                            drawMyMap(myMap);
+                            drawMyStats();
+                            break;
+                        }
+
 
                     case ConsoleKey.LeftArrow:
                         Console.Clear();
-                        Console.WriteLine("You go West");
                         playerPosX -= 1;
-                        myMap = updateMyMapCharMovement(myMap);
-                        drawMyMap(myMap);
-                        drawMyStats();
-                        break;
+
+                        if (playerPosX < 0)
+                        {
+                            Console.WriteLine("You cannot go there!");
+                            playerPosX += 1;
+                            myMap = updateMyMapCharMovement(myMap);
+                            drawMyMap(myMap);
+                            drawMyStats();
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("You go West");
+                            checkForEncounter(encounterPropability);
+                            myMap = updateMyMapCharMovement(myMap);
+                            drawMyMap(myMap);
+                            drawMyStats();
+                            break;
+                        }
 
                     case ConsoleKey.RightArrow:
                         Console.Clear();
-                        Console.WriteLine("You go East");
                         playerPosX += 1;
-                        myMap = updateMyMapCharMovement(myMap);
-                        drawMyMap(myMap);
-                        drawMyStats();
-                        break;
+
+                        if (playerPosX > mapSize - 1)
+                        {
+                            Console.WriteLine("You cannot go there!");
+                            playerPosX -= 1;
+                            myMap = updateMyMapCharMovement(myMap);
+                            drawMyMap(myMap);
+                            drawMyStats();
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("You go East");
+                            checkForEncounter(encounterPropability);
+                            myMap = updateMyMapCharMovement(myMap);
+                            drawMyMap(myMap);
+                            drawMyStats();
+                            break;
+                        }
+                        
 
                     case ConsoleKey.Escape:
                         return;
@@ -295,6 +339,48 @@
             myMatrix[playerPosY, playerPosX] = ' ';
 
             return myMatrix;
+        }
+    
+        static void checkForEncounter(float encounterPropability)
+        {
+            bool didEncounterOccur;
+            
+            Random rnd = new Random();
+
+            didEncounterOccur = rnd.NextDouble() < encounterPropability;
+
+            if (didEncounterOccur)
+            {
+                enemyEncounter();
+            }
+            else
+            {
+                Console.WriteLine("No hostile Encounter you luck bastaard!");
+            }
+
+            //return didEncounterOccur;
+
+
+        }
+    
+        
+        static void enemyEncounter()
+        {
+
+            Random rng = new Random();
+            
+            int d20 = rng.Next(20, 41);
+            double dMultiplier = rng.NextDouble();
+
+            int outcome = (int)(dMultiplier * d20);
+
+
+            Console.WriteLine("You ran into the dangerous Skeleton King!!!");
+
+            Console.WriteLine($"You suffered {outcome} damage");
+
+            playerHealth = playerHealth - outcome;
+            playerExp += 25;
         }
     }
     
