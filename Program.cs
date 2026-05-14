@@ -309,11 +309,14 @@
 
                     if (j == playerPosX && i == playerPosY)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.Write($"[{'X'}]");
+                        
                     }
                     else
                     {
-                       Console.Write($"[{matrix[i, j]}]");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write($"[{matrix[i, j]}]");
                     }
 
                         
@@ -324,6 +327,7 @@
 
         static void drawMyStats()
         {
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("=======================================");
             Console.WriteLine("Player stats:");
             Console.WriteLine($"{dungeonName} Lvl. {dungeonLevel}");
@@ -347,23 +351,29 @@
             
             Random rnd = new Random();
 
-            didEncounterOccur = rnd.NextDouble() < encounterPropability;
+            double returnedValue = rnd.NextDouble();
 
-            if (didEncounterOccur)
+            //didEncounterOccur = returnedValue < encounterPropability;
+
+            if (returnedValue < encounterPropability)
             {
                 enemyEncounter();
             }
+            else if (returnedValue>=encounterPropability && encounterPropability<0.4) 
+            {
+                foundFood();
+            }
+            else if (returnedValue >= 0.4 && encounterPropability < 0.5) 
+            {
+                foundTreasure();
+            }
             else
             {
-                Console.WriteLine("No hostile Encounter you luck bastaard!");
+                Console.WriteLine("No hostile Encounter you lucky bastard!");
             }
-
-            //return didEncounterOccur;
-
 
         }
     
-        
         static void enemyEncounter()
         {
 
@@ -382,6 +392,18 @@
             playerHealth = playerHealth - outcome;
             playerExp += 25;
         }
+    
+        static void foundFood()
+        {
+            Console.WriteLine("I found Food!!");
+        }
+
+        static void foundTreasure()
+        {
+            Console.WriteLine("I found Treasure !!!");
+        }
+    
+    
     }
     
         
